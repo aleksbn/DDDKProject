@@ -1,3 +1,6 @@
+using DDDKHostAPI.Configurations;
+using DDDKHostAPI.Models.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 
@@ -10,14 +13,15 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
     ));
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MapperInitializer));
+builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
 builder.Services.AddCors(o => {
     o.AddPolicy("AllowAll", b =>
     {
         b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+builder.Services.AddControllers();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
