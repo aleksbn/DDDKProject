@@ -8,6 +8,7 @@ namespace DDDKHostAPI.Configurations
     {
         public MapperInitializer()
         {
+            CreateMap<BloodType, BloodTypeDTO>().ReverseMap();
             CreateMap<Donator, DonatorDTO>().ReverseMap();
             CreateMap<Donation, DonationDTO>().ReverseMap();
             CreateMap<DonationEvent, DonationEventDTO>().ReverseMap();
