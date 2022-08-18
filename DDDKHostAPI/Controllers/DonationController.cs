@@ -2,11 +2,13 @@
 using DDDKHostAPI.IRepository;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DonationController : ControllerBase
@@ -22,7 +24,8 @@ namespace DDDKHostAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{donatorId:int}")]
+        [HttpGet]
+        [Route("donator")]
         public async Task<IActionResult> GetAllFromDonator(int donatorId)
         {
             try
@@ -41,7 +44,8 @@ namespace DDDKHostAPI.Controllers
             }
         }
 
-        [HttpGet("{donationEventId:int}")]
+        [HttpGet]
+        [Route("event")]
         public async Task<IActionResult> GetAllFromDonationEvent(int donationEventId)
         {
             try

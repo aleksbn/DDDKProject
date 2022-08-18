@@ -1,7 +1,10 @@
+using DDDKHostAPI;
 using DDDKHostAPI.Configurations;
 using DDDKHostAPI.IRepository;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Repository;
+using DDDKHostAPI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -16,6 +19,9 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
 
 // Add services to the container.
 builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddCors(o => {
     o.AddPolicy("AllowAll", b =>
     {
@@ -24,6 +30,7 @@ builder.Services.AddCors(o => {
 });
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 //ako imamo cycle error onda dodajemo biblioteku Microsoft.AspNetCore.Mvc.NewtonsoftJson i kucamo sljedecu komandu
 builder.Services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

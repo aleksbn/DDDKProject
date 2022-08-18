@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DDDKHostAPI.IRepository;
 using DDDKHostAPI.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase

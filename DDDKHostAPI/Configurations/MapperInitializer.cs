@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace DDDKHostAPI.Configurations
 {
@@ -17,6 +18,7 @@ namespace DDDKHostAPI.Configurations
             CreateMap<Donation, CreateDonationDTO>().ReverseMap();
             CreateMap<DonationEvent, CreateDonationEventDTO>().ReverseMap();
             CreateMap<Location, CreateLocationDTO>().ReverseMap();
+            CreateMap<IdentityUser, RegisterDTO>().ReverseMap();
         }
     }
 }
