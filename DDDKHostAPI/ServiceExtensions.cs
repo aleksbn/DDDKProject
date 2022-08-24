@@ -33,6 +33,7 @@ namespace DDDKHostAPI
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                        ValidAudience = "AllRegisteredUsers",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                     };
                 });

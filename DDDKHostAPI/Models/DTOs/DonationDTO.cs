@@ -12,4 +12,9 @@
         public DonatorDTO Donator { get; set; }
         public DonationEventDTO DonationEvent { get; set; }
     }
+
+    public class UpdateDonationDTO: DonationDTO
+    {
+
+    }
 }

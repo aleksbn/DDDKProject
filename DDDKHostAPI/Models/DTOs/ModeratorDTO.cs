@@ -15,14 +15,15 @@ namespace DDDKHostAPI.Models.DTOs
     public class RegisterDTO: LoginDTO
     {
         [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        [Required]
         [DataType(DataType.Password)]
         public string PasswordConfirmation { get; set; }
         [Required]
         [EmailAddress]
         public string EmailConfirmation { get; set; }
+    }
+
+    public class UpdateModeratorDTO: RegisterDTO
+    {
+
     }
 }

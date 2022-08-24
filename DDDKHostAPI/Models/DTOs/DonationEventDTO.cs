@@ -13,4 +13,9 @@
         public int Id { get; set; }
         public LocationDTO Location { get; set; }
     }
+
+    public class UpdateDonationEventDTO: DonationEventDTO
+    {
+
+    }
 }

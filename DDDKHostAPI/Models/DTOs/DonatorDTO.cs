@@ -28,4 +28,9 @@ namespace DDDKHostAPI.Models.DTOs
         public IList<DonationDTO> Donations { get; set; }
         public BloodTypeDTO BloodType { get; set; }
     }
+
+    public class UpdateDonatorDTO: DonatorDTO
+    {
+
+    }
 }

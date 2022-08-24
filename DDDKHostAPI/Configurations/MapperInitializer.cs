@@ -12,6 +12,7 @@ namespace DDDKHostAPI.Configurations
             CreateMap<BloodType, BloodTypeDTO>().ReverseMap();
             CreateMap<Donator, DonatorDTO>().ReverseMap();
             CreateMap<Donation, DonationDTO>().ReverseMap();
+            CreateMap<Donation, CreateDonationDTO>().ReverseMap();
             CreateMap<DonationEvent, DonationEventDTO>().ReverseMap();
             CreateMap<Location, LocationDTO>().ReverseMap();
             CreateMap<Donator, CreateDonatorDTO>().ReverseMap();

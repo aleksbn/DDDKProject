@@ -11,4 +11,9 @@
         public int Id { get; set; }
         public virtual IList<DonationEventDTO> DonationEvents { get; set; }
     }
+
+    public class UpdateLocationDTO: CreateLocationDTO
+    {
+        public int Id { get; set; }
+    }
 }
