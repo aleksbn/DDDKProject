@@ -44,27 +44,19 @@ namespace DDDKHostAPI.Controllers
             {
                 return BadRequest("Email or password not equal to their confirmation");
             }
-            try
+            var user = _mapper.Map<IdentityUser>(registerDTO);
+            user.UserName = user.Email;
+            var result = await _userManager.CreateAsync(user, registerDTO.Password);
+            if (!result.Succeeded)
             {
-                var user = _mapper.Map<IdentityUser>(registerDTO);
-                user.UserName = user.Email;
-                var result = await _userManager.CreateAsync(user, registerDTO.Password);
-                if (!result.Succeeded)
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return BadRequest(ModelState);
+                    ModelState.AddModelError(error.Code, error.Description);
                 }
-                await _userManager.AddToRoleAsync(user, "Moderator");
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(Register)} controller.");
-                return Problem("Internal server error, please try again", statusCode: 500);
-            }
+            await _userManager.AddToRoleAsync(user, "Moderator");
+            return Ok();
         }
 
         [HttpPost]
@@ -77,22 +69,14 @@ namespace DDDKHostAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try
+            if (!await _authManager.ValidateUser(loginDTO))
             {
-                if (!await _authManager.ValidateUser(loginDTO))
-                {
-                    return Unauthorized("User login attempt failed");
-                }
-                return Accepted(new
-                {
-                    Token = await _authManager.CreateToken()
-                });
+                return Unauthorized("User login attempt failed");
             }
-            catch (Exception x)
+            return Accepted(new
             {
-                _logger.LogError(x, $" Something went wrong in the {nameof(Login)} controller.");
-                return Problem("Internal server error, please try again", statusCode: 500);
-            }
+                Token = await _authManager.CreateToken()
+            });
         }
 
         [Authorize(Roles = "Admin")]
@@ -105,37 +89,28 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateModerator)}");
                 return BadRequest(ModelState);
             }
-
-            try
+            var user = await _userManager.Users.FirstOrDefaultAsync(q => q.Id.Equals(id));
+            if (user == null)
             {
-                var user = await _userManager.Users.FirstOrDefaultAsync(q => q.Id.Equals(id));
-                if (user == null)
-                {
-                    _logger.LogError($"That user does not exist");
-                    return BadRequest("Invalid user");
-                }
-                if (moderatorDTO.Password != moderatorDTO.PasswordConfirmation 
-                    || moderatorDTO.Email != moderatorDTO.EmailConfirmation)
-                {
-                    _logger.LogError("Password and its confirmation, or email and its confirmation do not match");
-                    return BadRequest("Invalid data");
-                }
-                if (_db.Users.Count(u => u.Email == moderatorDTO.Email) > 0)
-                {
-                    _logger.LogError("That email is already taken");
-                    return BadRequest("Invalid data");
-                }
-                _mapper.Map(moderatorDTO, user);
-                user.UserName = user.Email;
-                await _userManager.UpdateAsync(user);
-                _db.SaveChanges();
-                return NoContent();
+                _logger.LogError($"That user does not exist");
+                return BadRequest("Invalid user");
             }
-            catch (Exception x)
+            if (moderatorDTO.Password != moderatorDTO.PasswordConfirmation 
+                || moderatorDTO.Email != moderatorDTO.EmailConfirmation)
             {
-                _logger.LogError(x, $"Somethoing went wrong in the {nameof(UpdateModerator)}");
-                return StatusCode(500, "Internal server error, please try later");
+                _logger.LogError("Password and its confirmation, or email and its confirmation do not match");
+                return BadRequest("Invalid data");
             }
+            if (_db.Users.Count(u => u.Email == moderatorDTO.Email) > 0)
+            {
+                _logger.LogError("That email is already taken");
+                return BadRequest("Invalid data");
+            }
+            _mapper.Map(moderatorDTO, user);
+            user.UserName = user.Email;
+            await _userManager.UpdateAsync(user);
+            _db.SaveChanges();
+            return NoContent();
         }
 
         [Authorize(Roles = "Admin")]
@@ -148,24 +123,15 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteModerator)}");
                 return BadRequest();
             }
-
-            try
+            var user = _userManager.Users.FirstOrDefaultAsync(q => q.Id == id);
+            if (user == null)
             {
-                var user = _userManager.Users.FirstOrDefaultAsync(q => q.Id == id);
-                if (user == null)
-                {
-                    _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteModerator)}");
-                    return BadRequest("Submitted data is invalid");
-                }
-                await _userManager.DeleteAsync(await user);
-                _db.SaveChanges();
-                return NoContent();
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteModerator)}");
+                return BadRequest("Submitted data is invalid");
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Something Went Wrong in the {nameof(DeleteModerator)}");
-                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
-            }
+            await _userManager.DeleteAsync(await user);
+            _db.SaveChanges();
+            return NoContent();
         }
     }
 }

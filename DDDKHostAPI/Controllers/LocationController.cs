@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DDDKHostAPI.IRepository;
+using DDDKHostAPI.Models;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -25,39 +26,23 @@ namespace DDDKHostAPI.Controllers
 
         [HttpGet]
         [ActionName(nameof(GetLocations))]
-        public async Task<IActionResult> GetLocations()
+        public async Task<IActionResult> GetLocations([FromQuery] RequestParams requestParams)
         {
-            try
-            {
-                var locations = await _unitOfWork.Locations.GetAll();
-                var locationsToReturn = _mapper.Map<IList<LocationDTO>>(locations);
-                return Ok(locationsToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(LocationController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+            var locations = await _unitOfWork.Locations.GetAll(null, null, null, requestParams);
+            var locationsToReturn = _mapper.Map<IList<LocationDTO>>(locations);
+            return Ok(locationsToReturn);
         }
 
         [HttpGet("{id:int}")]
         [ActionName(nameof(GetLocation))]
         public async Task<IActionResult> GetLocation(int id)
         {
-            try
+            var location = await _unitOfWork.Locations.Get(l => l.Id == id, new List<string>
             {
-                var location = await _unitOfWork.Locations.Get(l => l.Id == id, new List<string>
-                {
-                    "DonationEvents"
-                });
-                var locationToReturn = _mapper.Map<LocationDTO>(location);
-                return Ok(locationToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(LocationController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+                "DonationEvents"
+            });
+            var locationToReturn = _mapper.Map<LocationDTO>(location);
+            return Ok(locationToReturn);
         }
 
         [HttpPost]
@@ -69,19 +54,10 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid POST attempt in {nameof(CreateLocation)}");
                 return BadRequest(ModelState);
             }
-
-            try
-            {
-                var location = _mapper.Map<Location>(locationDTO);
-                await _unitOfWork.Locations.Insert(location);
-                await _unitOfWork.Save();
-                return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(CreateLocation)}.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+            var location = _mapper.Map<Location>(locationDTO);
+            await _unitOfWork.Locations.Insert(location);
+            await _unitOfWork.Save();
+            return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
         }
 
         [HttpPut]
@@ -93,25 +69,16 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateLocation)}");
                 return BadRequest(ModelState);
             }
-
-            try
+            var location = await _unitOfWork.Locations.Get(q => q.Id == id);
+            if (location == null)
             {
-                var location = await _unitOfWork.Locations.Get(q => q.Id == id);
-                if (location == null)
-                {
-                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateLocation)}");
-                    return BadRequest("Submitted data is invalid");
-                }
-                _mapper.Map(locationDTO, location);
-                _unitOfWork.Locations.Update(location);
-                await _unitOfWork.Save();
-                return NoContent();
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateLocation)}");
+                return BadRequest("Submitted data is invalid");
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Somethoing went wrong in the {nameof(UpdateLocation)}");
-                return StatusCode(500, "Internal server error, please try later");
-            }
+            _mapper.Map(locationDTO, location);
+            _unitOfWork.Locations.Update(location);
+            await _unitOfWork.Save();
+            return NoContent();
         }
     }
 }

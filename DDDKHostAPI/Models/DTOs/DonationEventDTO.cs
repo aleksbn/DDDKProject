@@ -1,9 +1,12 @@
-﻿namespace DDDKHostAPI.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DDDKHostAPI.Models.DTOs
 {
     public class CreateDonationEventDTO
     {
-        
+        [Required]
         public DateTime EventDate { get; set; }
+        [Required]
         public int LocationId { get; set; }
         public string Description { get; set; }
     }

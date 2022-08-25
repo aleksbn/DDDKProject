@@ -1,7 +1,10 @@
-﻿using DDDKHostAPI.Models.Data;
+﻿using DDDKHostAPI.Models;
+using DDDKHostAPI.Models.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace DDDKHostAPI
@@ -19,7 +22,7 @@ namespace DDDKHostAPI
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("Jwt");
-            var key = configuration.GetSection("Jwt").GetSection("Key").Value;
+            var key = jwtSettings.GetSection("Key").Value;
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,6 +40,27 @@ namespace DDDKHostAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                     };
                 });
+        }
+
+        public static void ConfigureExceptionHandling(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(error => {
+                error.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        Log.Error($"Something went wrong in the {contextFeature.Error}");
+                        await context.Response.WriteAsync(new Error
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message = "Internal Server error. Please try again."
+                        }.ToString());
+                    }
+                });
+            });
         }
     }
 }

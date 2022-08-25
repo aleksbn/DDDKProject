@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DDDKHostAPI.Models;
+using System.Linq.Expressions;
 
 namespace DDDKHostAPI.IRepository
 {
@@ -6,7 +7,7 @@ namespace DDDKHostAPI.IRepository
     {
         Task<IList<T>> GetAll(Expression<Func<T, bool>>? expression = null,
                               Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-                              List<string>? includes = null);
+                              List<string>? includes = null, RequestParams? requestParams = null);
 
         Task<T> Get(Expression<Func<T, bool>> expression, List<string>? includes = null);
 

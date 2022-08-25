@@ -23,16 +23,8 @@ namespace DDDKHostAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var bloodTypes = await _unitOfWork.BloodTypes.GetAll();
-                return Ok(bloodTypes);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(BloodTypeController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+            var bloodTypes = await _unitOfWork.BloodTypes.GetAll();
+            return Ok(bloodTypes);
         }
     }
 }

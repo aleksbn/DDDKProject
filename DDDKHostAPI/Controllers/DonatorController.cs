@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DDDKHostAPI.IRepository;
+using DDDKHostAPI.Models;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -28,41 +29,25 @@ namespace DDDKHostAPI.Controllers
         [ActionName(nameof(GetDonator))]
         public async Task<IActionResult> GetDonator(int id)
         {
-            try
+            var donator = await _unitOfWork.Donators.Get(d => d.ID == id, new List<string>
             {
-                var donator = await _unitOfWork.Donators.Get(d => d.ID == id, new List<string>
-                {
-                    "Donations"
-                });
-                var donatorToReturn = _mapper.Map<DonatorDTO>(donator);
-                return Ok(donatorToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(DonatorController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+                "Donations"
+            });
+            var donatorToReturn = _mapper.Map<DonatorDTO>(donator);
+            return Ok(donatorToReturn);
         }
 
         [HttpGet]
         [Route("bloodtype")]
         [ActionName(nameof(GetAllFromBloodType))]
-        public async Task<IActionResult> GetAllFromBloodType(int bloodTypeId)
+        public async Task<IActionResult> GetAllFromBloodType(int bloodTypeId, [FromQuery] RequestParams requestParams)
         {
-            try
+            var donators = await _unitOfWork.Donators.GetAll(d => d.BloodTypeId == bloodTypeId, null, new List<string>
             {
-                var donators = await _unitOfWork.Donators.GetAll(d => d.BloodTypeId == bloodTypeId, null, new List<string>
-                {
-                   "BloodType", "Donations"
-                });
-                var donatorsToReturn = _mapper.Map<IList<DonatorDTO>>(donators);
-                return Ok(donatorsToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(DonatorController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+                "BloodType", "Donations"
+            }, requestParams);
+            var donatorsToReturn = _mapper.Map<IList<DonatorDTO>>(donators);
+            return Ok(donatorsToReturn);
         }
 
         [HttpPost]
@@ -74,19 +59,10 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid POST attempt in {nameof(CreateDonator)}");
                 return BadRequest(ModelState);
             }
-
-            try
-            {
-                var donator = _mapper.Map<Donator>(donatorDTO);
-                await _unitOfWork.Donators.Insert(donator);
-                await _unitOfWork.Save();
-                return CreatedAtAction(nameof(GetDonator), new { id = donator.ID }, donator);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(CreateDonator)}.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+            var donator = _mapper.Map<Donator>(donatorDTO);
+            await _unitOfWork.Donators.Insert(donator);
+            await _unitOfWork.Save();
+            return CreatedAtAction(nameof(GetDonator), new { id = donator.ID }, donator);
         }
 
         [HttpPut]
@@ -98,25 +74,16 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonator)}");
                 return BadRequest(ModelState);
             }
-
-            try
+            var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
+            if (donator == null)
             {
-                var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
-                if (donator == null)
-                {
-                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonator)}");
-                    return BadRequest("Submitted data is invalid");
-                }
-                _mapper.Map(donatorDTO, donator);
-                _unitOfWork.Donators.Update(donator);
-                await _unitOfWork.Save();
-                return NoContent();
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonator)}");
+                return BadRequest("Submitted data is invalid");
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Somethoing went wrong in the {nameof(UpdateDonator)}");
-                return StatusCode(500, "Internal server error, please try later");
-            }
+            _mapper.Map(donatorDTO, donator);
+            _unitOfWork.Donators.Update(donator);
+            await _unitOfWork.Save();
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
@@ -128,24 +95,15 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonator)}");
                 return BadRequest();
             }
-
-            try
+            var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
+            if (donator == null)
             {
-                var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
-                if (donator == null)
-                {
-                    _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonator)}");
-                    return BadRequest("Submitted data is invalid");
-                }
-                await _unitOfWork.Donators.Delete(id);
-                await _unitOfWork.Save();
-                return NoContent();
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonator)}");
+                return BadRequest("Submitted data is invalid");
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Something Went Wrong in the {nameof(DeleteDonator)}");
-                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
-            }
+            await _unitOfWork.Donators.Delete(id);
+            await _unitOfWork.Save();
+            return NoContent();
         }
     }
 }

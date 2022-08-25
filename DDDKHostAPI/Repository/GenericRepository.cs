@@ -1,6 +1,8 @@
 ﻿using DDDKHostAPI.IRepository;
+using DDDKHostAPI.Models;
 using DDDKHostAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DDDKHostAPI.Repository
 {
@@ -40,7 +42,7 @@ namespace DDDKHostAPI.Repository
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IList<T>> GetAll(System.Linq.Expressions.Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
+        public async Task<IList<T>> GetAll(System.Linq.Expressions.Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null, RequestParams? requestParams = null)
         {
             IQueryable<T> query = _db;
             if (expression != null)
@@ -58,10 +60,15 @@ namespace DDDKHostAPI.Repository
             {
                 query = orderBy(query);
             }
-            return await query.AsNoTracking().ToListAsync();
+            IList<T> toReturn = await query.AsNoTracking().ToListAsync();
+            if (requestParams != null)
+            {
+                toReturn = toReturn.Skip((requestParams.PageNumber - 1) * requestParams.PageSize).Take(requestParams.PageSize).ToList();
+            }
+            return toReturn;
         }
 
-        public async Task Insert(T entity)
+       public async Task Insert(T entity)
         {
             await _db.AddAsync(entity);
         }

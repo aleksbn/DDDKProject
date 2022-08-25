@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DDDKHostAPI.IRepository;
+using DDDKHostAPI.Models;
 using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -26,42 +27,26 @@ namespace DDDKHostAPI.Controllers
 
         [HttpGet]
         [ActionName(nameof(GetAll))]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]RequestParams requestParams)
         {
-            try
+            var donationEvents = await _unitOfWork.DonationEvents.GetAll(null, null, new List<string>
             {
-                var donationEvents = await _unitOfWork.DonationEvents.GetAll(null, null, new List<string>
-                {
-                    "Location"
-                });
-                var donationEventsToReturn = _mapper.Map<IList<DonationEventDTO>>(donationEvents);
-                return Ok(donationEventsToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(DonationEventController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+                "Location"
+            }, requestParams);
+            var donationEventsToReturn = _mapper.Map<IList<DonationEventDTO>>(donationEvents);
+            return Ok(donationEventsToReturn);
         }
 
         [HttpGet("{id:int}")]
         [ActionName(nameof(Get))]
         public async Task<IActionResult> Get(int id)
         {
-            try
+            var donationEvents = await _unitOfWork.DonationEvents.GetAll(de => de.Id == id, null, new List<string>
             {
-                var donationEvents = await _unitOfWork.DonationEvents.GetAll(de => de.Id == id, null, new List<string>
-                {
-                    "Location"
-                });
-                var donationEventsToReturn = _mapper.Map<IList<DonationEventDTO>>(donationEvents);
-                return Ok(donationEventsToReturn);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $" Something went wrong in the {nameof(DonationEventController)} controller.");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+                "Location"
+            });
+            var donationEventsToReturn = _mapper.Map<IList<DonationEventDTO>>(donationEvents);
+            return Ok(donationEventsToReturn);
         }
 
         [HttpPost]
@@ -73,19 +58,10 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid POST attempt in {nameof(CreateDonationEvent)}");
                 return BadRequest(ModelState);
             }
-
-            try
-            {
-                var donationEvent = _mapper.Map<DonationEvent>(donationEventDTO);
-                await _unitOfWork.DonationEvents.Insert(donationEvent);
-                await _unitOfWork.Save();
-                return CreatedAtAction(nameof(Get), new { id = donationEvent.Id }, donationEvent);
-            }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Something went wrong in the {nameof(CreateDonationEvent)}");
-                return StatusCode(500, "Internal server error, please try again");
-            }
+            var donationEvent = _mapper.Map<DonationEvent>(donationEventDTO);
+            await _unitOfWork.DonationEvents.Insert(donationEvent);
+            await _unitOfWork.Save();
+            return CreatedAtAction(nameof(Get), new { id = donationEvent.Id }, donationEvent);
         }
 
         [HttpPut]
@@ -97,25 +73,16 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonationEvent)}");
                 return BadRequest(ModelState);
             }
-
-            try
+            var donationEvent = await _unitOfWork.DonationEvents.Get(q => q.Id == id);
+            if (donationEvent == null)
             {
-                var donationEvent = await _unitOfWork.DonationEvents.Get(q => q.Id == id);
-                if (donationEvent == null)
-                {
-                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonationEvent)}");
-                    return BadRequest("Submitted data is invalid");
-                }
-                _mapper.Map(donationEventDTO, donationEvent);
-                _unitOfWork.DonationEvents.Update(donationEvent);
-                await _unitOfWork.Save();
-                return NoContent();
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonationEvent)}");
+                return BadRequest("Submitted data is invalid");
             }
-            catch (Exception x)
-            {
-                _logger.LogError(x, $"Somethoing went wrong in the {nameof(UpdateDonationEvent)}");
-                return StatusCode(500, "Internal server error, please try later");
-            }
+            _mapper.Map(donationEventDTO, donationEvent);
+            _unitOfWork.DonationEvents.Update(donationEvent);
+            await _unitOfWork.Save();
+            return NoContent();
         }
     }
 }
