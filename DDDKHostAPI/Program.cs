@@ -11,7 +11,7 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
-        path: "c:\\Users\\HP\\source\\repos\\DDDKProject",
+        path: "logs\\log-.txt",
         outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
         rollingInterval: RollingInterval.Day,
         restrictedToMinimumLevel: LogEventLevel.Information
