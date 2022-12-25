@@ -18,6 +18,7 @@ namespace DDDKHostAPI.Configurations
             CreateMap<Location, CreateLocationDTO>().ReverseMap();
             CreateMap<DonationEvent, DonationEventDTO>().ReverseMap();
             CreateMap<DonationEvent, CreateDonationEventDTO>().ReverseMap();
+            //4.2.2 Dodajemo mapiranje za registracioni DTO
             CreateMap<IdentityUser, RegisterDTO>().ReverseMap();
         }
     }

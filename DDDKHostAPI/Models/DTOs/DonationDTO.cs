@@ -6,14 +6,14 @@ namespace DDDKHostAPI.Models.DTOs
     {
         [Required]
         public int DonatorId { get; set; }
+        [Required]
         public int DonationEventId { get; set; }
     }
 
     public class DonationDTO: CreateDonationDTO
     {
+        [Required]
         public int Id { get; set; }
-        public DonatorDTO Donator { get; set; }
-        public DonationEventDTO DonationEvent { get; set; }
     }
 
     public class UpdateDonationDTO: DonationDTO

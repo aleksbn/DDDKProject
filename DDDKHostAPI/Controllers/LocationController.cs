@@ -60,7 +60,7 @@ namespace DDDKHostAPI.Controllers
             return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ActionName(nameof(UpdateLocation))]
         public async Task<IActionResult> UpdateLocation(int id, [FromBody] UpdateLocationDTO locationDTO)
         {

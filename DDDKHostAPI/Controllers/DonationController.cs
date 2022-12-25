@@ -29,6 +29,7 @@ namespace DDDKHostAPI.Controllers
         [HttpGet]
         [Route("donator")]
         [ActionName(nameof(GetAllFromDonator))]
+        //6.1.2 Ovdje se dodaje [FromQuery] RequestParams requestParams kako bi se proslijedilo vise od jednog parametra (konkretno, PageSize i PageNumber)
         public async Task<IActionResult> GetAllFromDonator(int donatorId, [FromQuery] RequestParams requestParams)
         {
             var donations = await _unitOfWork.Donations.GetAll(d => d.DonatorId == donatorId, null, new List<string>
@@ -77,7 +78,7 @@ namespace DDDKHostAPI.Controllers
             return CreatedAtAction(nameof(Get), new { id = donation.Id }, donation);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ActionName(nameof(UpdateDonation))]
         public async Task<IActionResult> UpdateDonation(int id, [FromBody] UpdateDonationDTO donationDTO)
         {

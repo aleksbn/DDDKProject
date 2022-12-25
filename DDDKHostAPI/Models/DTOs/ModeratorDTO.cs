@@ -15,6 +15,8 @@ namespace DDDKHostAPI.Models.DTOs
     public class RegisterDTO: LoginDTO
     {
         [Required]
+        public string Role { get; set; }
+        [Required]
         [DataType(DataType.Password)]
         public string PasswordConfirmation { get; set; }
         [Required]
@@ -24,6 +26,8 @@ namespace DDDKHostAPI.Models.DTOs
 
     public class UpdateModeratorDTO: RegisterDTO
     {
-
+        [Required]
+        [EmailAddress]
+        public string OldEmail { get; set; }
     }
 }

@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DDDKHostAPI.Configurations
 {
+    //4.3.2 Za svaku tabelu iz baze podataka unosimo podatke preko ove klase prilikom prvog startovanja
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
@@ -44,6 +47,48 @@ namespace DDDKHostAPI.Configurations
                     Id = 3,
                     Name = "Bijeljina - Dašnjica 1",
                     Description = "OŠ Knez Ivo od Semberije"
+                },
+                new Location
+                {
+                    Id = 4,
+                    Name = "Bijeljina - Vuk Karadzic skola",
+                    Description = "OŠ Vuk Karadžić"
+                },
+                new Location
+                {
+                    Id = 5,
+                    Name = "Dvorovi - škola",
+                    Description = "OŠ Sveti Sava"
+                },
+                new Location
+                {
+                    Id = 6,
+                    Name = "Velika Obarska",
+                    Description = "Dom Omladine Velika Obarska"
+                },
+                new Location
+                {
+                    Id = 7,
+                    Name = "Batković",
+                    Description = "Sala Osnovne škole"
+                },
+                new Location
+                {
+                    Id = 8,
+                    Name = "Branjevo",
+                    Description = "Ambulanta Branjevo"
+                },
+                new Location
+                {
+                    Id = 9,
+                    Name = "Patkovača",
+                    Description = "OŠ Jovan Dučić Patkovača"
+                },
+                new Location
+                {
+                    Id = 10,
+                    Name = "Dvorovi - Banja",
+                    Description = "Banja Dvorovi"
                 }
                 );
         }
@@ -108,115 +153,89 @@ namespace DDDKHostAPI.Configurations
     {
         public void Configure(EntityTypeBuilder<Donation> builder)
         {
-            builder.HasData(
-                new Donation
+            Random r = new Random();
+            Donation[] allDonations = new Donation[200];
+            for(int i=0; i<200; i++)
+            {
+                allDonations[i] = new Donation
                 {
-                    Id = 1,
-                    DonatorId = 3,
-                    DonationEventId = 1
-                },
-                new Donation
-                {
-                    Id = 2,
-                    DonatorId = 1,
-                    DonationEventId = 1
-                },
-                new Donation
-                {
-                    Id = 3,
-                    DonatorId = 1,
-                    DonationEventId = 2
-                },
-                new Donation
-                {
-                    Id = 4,
-                    DonatorId = 2,
-                    DonationEventId = 1
-                },
-                new Donation
-                {
-                    Id = 5,
-                    DonatorId = 2,
-                    DonationEventId = 2
-                }
-                );
+                    Id = i + 1,
+                    DonatorId = r.Next(1, 31),
+                    DonationEventId = r.Next(1, 21)
+                };
+            }
+            builder.HasData(allDonations);
         }
     }
     public class DonationEventConfiguration : IEntityTypeConfiguration<DonationEvent>
     {
+        private DonationEvent[] sveAkcije = new DonationEvent[20];
+        Random r = new Random();
+        
         public void Configure(EntityTypeBuilder<DonationEvent> builder)
         {
-            builder.HasData(
-                new DonationEvent
+            for (int i = 0; i < 20; i++)
+            {
+                sveAkcije[i] = new DonationEvent
                 {
-                    Id = 1,
-                    EventDate = new DateTime(2021, 5, 22),
-                    LocationId = 2,
-                    Description = "Akcija dobrovoljnog darovanja krvi u D. Crnjelovu 2021"
-                },
-                new DonationEvent
-                {
-                    Id = 2,
-                    EventDate = new DateTime(2022, 1, 3),
-                    LocationId = 3,
-                    Description = "Akcija dobrovoljnog darovanja krvi u Magnojevicu 2022"
-                });
+                    Id = i + 1,
+                    LocationId = r.Next(1, 11),
+                    EventDate = new DateTime(r.Next(2015, 2022), r.Next(1, 13), r.Next(1, 29)),
+                    Description = "Akcija dobrovoljnog darovanja krvi br. " + i
+                };
+            }
+            builder.HasData(sveAkcije);
         }
     }
     public class DonatorConfiguration : IEntityTypeConfiguration<Donator>
     {
+        Random r = new Random();
+        public string[] imena = new string[]
+        {
+            "Aleksandar", "Petar", "Ivana", "Mitar", "Bojan", "Slavica", "Mirko", "Dejan", "Zeljka", "Nikola", "Natasa", "Nevena", "Jovana", "Aleksandra", "Ivan", "Nemanja", "Nikolina", "Uros",
+            "Slavko", "Marica", "Marija", "Marko", "Sandra", "Neven", "Miroslav"
+        };
+        public string[] prezimena = new string[]
+        {
+            "Matic", "Ilic", "Jovic", "Petrovic", "Becic", "Mitrovic", "Jankovic", "Jokanovic", "Aleksic", "Tanaskovic", "Popovic", "Ivkovic", "Lalic", "Rodic", "Milovanovic", "Bojic", "Markovic", 
+            "Simic", "Djordjevic", "Djurickovic", "Stojkovic", "Tadic", "Stevanovic", "Stevic", "Stanic"
+        };
+        public string[] ulice = new string[]
+        {
+            "Petra Kocica", "Sime Matavulja", "Ive Andrica", "Svetog Save", "Nikole Tesle", "Jovana Ducica", "Gavrila Principa", "Dusana Baranina", "Mihajla Pupina", "Patrijarha Pavla", 
+            "Danila Kisa", "Dusana Silnog", "Kralja Petra I Karadjordjevica", "Dinastije Obrenovic", "Masarikova", "Svetozara Markovica", "Mihaila Petrovica Alasa"
+        };
+        public Donator[] sviDonatori = new Donator[30];
+        private string generisanoIme;
+        private string generisanoPrezime;
+        private string generisaniEmail;
+        private DateTime generisaniDatumRodjenja;
+        private string generisanaAdresa;
+        private string generisaniBrojTelefona;
         public void Configure(EntityTypeBuilder<Donator> builder)
         {
-            builder.HasData(
-                new Donator
+            for (int i = 0; i < 30; i++)
+            {
+                generisanoIme = imena[r.Next(0, imena.Length - 1)];
+                generisanoPrezime = prezimena[r.Next(0, prezimena.Length - 1)];
+                generisaniEmail = generisanoIme + generisanoPrezime + r.Next() + "@gmail.com";
+                generisaniDatumRodjenja = new DateTime(r.Next(1950, 2000), r.Next(1, 13), r.Next(1, 29));
+                generisanaAdresa = ulice[r.Next(0, ulice.Length - 1)] + " " + r.Next(1, 201);
+                generisaniBrojTelefona = "065/" + r.Next(100, 1000) + "-" + r.Next(100, 1000);
+                sviDonatori[i] = new Donator
                 {
-                    ID = 1,
-                    FirstName = "Aleksandar",
-                    LastName = "Matic",
-                    Email = "aleksbn417@gmail.com",
-                    BirthDate = new DateTime(1986, 12, 9),
-                    Address = "Dusana Baranina 1/C/10, Bijeljina",
-                    PhoneNumber = "065/417-302",
-                    BloodTypeId = 7,
-                    PreviousDonations = 5
-                },
-                new Donator
-                {
-                    ID = 2,
-                    FirstName = "Petar",
-                    LastName = "Peric",
-                    Email = "pperic@gmail.com",
-                    BirthDate = new DateTime(1958, 7, 22),
-                    Address = "Vrulja bb, Donje Crnjelovo",
-                    PhoneNumber = "065/257-417",
-                    BloodTypeId = 5,
-                    PreviousDonations = 89
-                },
-                new Donator
-                {
-                    ID = 3,
-                    FirstName = "Ivana",
-                    LastName = "Stevic",
-                    Email = "ivanas@gmail.com",
-                    BirthDate = new DateTime(2000, 1, 19),
-                    Address = "Gavrila Principa 14/22, Bijeljina",
-                    PhoneNumber = "065/741-956",
-                    BloodTypeId = 5,
-                    PreviousDonations = 1
-                },
-                new Donator
-                {
-                    ID = 4,
-                    FirstName = "Maja",
-                    LastName = "Gobeljic",
-                    Email = "majag@gmail.com",
-                    BirthDate = new DateTime(2001, 4, 10),
-                    Address = "Mala Obarska BB",
-                    PhoneNumber = "065/778-332",
-                    BloodTypeId = 6,
-                    PreviousDonations = 2
-                }
-                );
+                    ID = i + 1,
+                    FirstName = generisanoIme,
+                    LastName = generisanoPrezime,
+                    Email = generisaniEmail,
+                    BirthDate = generisaniDatumRodjenja,
+                    Address = generisanaAdresa,
+                    PhoneNumber = generisaniBrojTelefona,
+                    BloodTypeId = r.Next(1,9),
+                    PreviousDonations = r.Next(1, 21)
+                };
+            }
+            builder.HasData(sviDonatori);
         }
     }
 }

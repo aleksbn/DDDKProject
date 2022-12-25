@@ -6,6 +6,7 @@ namespace DDDKHostAPI.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
+        //2.3.9 Postavljamo instancu DbContext klase za dependency injection
         private readonly DatabaseContext _dbContext;
         private IGenericRepository<BloodType> _bloodTypeRepository;
         private IGenericRepository<Donation> _donationRepository;
@@ -17,7 +18,7 @@ namespace DDDKHostAPI.Repository
         {
             _dbContext = dbContext;
         }
-
+        //Ovaj dupli upitnik znaci "ako je null, uradi sljedece:"
         public IGenericRepository<BloodType> BloodTypes => _bloodTypeRepository ??= new GenericRepository<BloodType>(_dbContext);
         public IGenericRepository<Donation> Donations => _donationRepository ??= new GenericRepository<Donation>(_dbContext);
         public IGenericRepository<DonationEvent> DonationEvents => _donationEventRepository ??= new GenericRepository<DonationEvent>(_dbContext);

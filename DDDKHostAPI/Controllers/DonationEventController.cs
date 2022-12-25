@@ -64,7 +64,7 @@ namespace DDDKHostAPI.Controllers
             return CreatedAtAction(nameof(Get), new { id = donationEvent.Id }, donationEvent);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ActionName(nameof(UpdateDonationEvent))]
         public async Task<IActionResult> UpdateDonationEvent(int id, [FromBody] UpdateDonationEventDTO donationEventDTO)
         {

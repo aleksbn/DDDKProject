@@ -8,15 +8,19 @@ namespace DDDKHostAPI.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T: class
     {
+        //2.3.4 Pravimo 2 privatna polja koja sluze tome da se ova klasa ne mora instancirati svaki put kad nam ustreba
         private readonly DatabaseContext _databaseContext;
         private readonly DbSet<T> _db;
 
         public GenericRepository(DatabaseContext databaseContext)
         {
+            //databaseContext je instancirana u Program.cs fajlu
             _databaseContext = databaseContext;
+            //Tip T iz ove komande je bilo koji DbSet iz klase DatabaseContext 
             _db = _databaseContext.Set<T>();
         }
 
+        //2.3.5 Pisanje svih metoda naslijedjenih iz IGenericRepository
         public async Task Delete(int id)
         {
             var entity = await _db.FindAsync(id);
@@ -29,7 +33,7 @@ namespace DDDKHostAPI.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(System.Linq.Expressions.Expression<Func<T, bool>>? expression = null, List<string>? includes = null)
+        public async Task<T> Get(Expression<Func<T, bool>>? expression = null, List<string>? includes = null)
         {
             IQueryable<T> query = _db;
             if (includes != null)
@@ -41,8 +45,8 @@ namespace DDDKHostAPI.Repository
             }
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
-
-        public async Task<IList<T>> GetAll(System.Linq.Expressions.Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null, RequestParams? requestParams = null)
+        //6.1.4 Dodajemo requestParams da bi paginacija radila
+        public async Task<IList<T>> GetAll(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null, RequestParams? requestParams = null)
         {
             IQueryable<T> query = _db;
             if (expression != null)
@@ -68,7 +72,7 @@ namespace DDDKHostAPI.Repository
             return toReturn;
         }
 
-       public async Task Insert(T entity)
+        public async Task Insert(T entity)
         {
             await _db.AddAsync(entity);
         }

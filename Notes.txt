@@ -1,0 +1,97 @@
+Zadatak: prepraviti klasu EntityConfiguration kako bi napravila random podatke
+
+1.1	Konfiguracija logova uz SeriLog
+	1.1.1	Instaliramo Serilog.AspNetCore u nuget package
+	1.1.2	Konfigurisemo serilog u Program.cs
+1.2	Konfiguracija CORS
+	1.2.1	Program.cs
+	1.2.2	Program.cs
+2.1	Implementacija klasa i EF-a
+	2.1.1	Pravimo novi "Data" folder za entitetske klase
+	2.1.2	Dodajemo sve entitetske klase (u jednini), ali bez atributa
+	2.1.3	Dodajemo DbContext.cs klasu za bazu
+	2.1.4	Ubacujemo Microsoft.EntityFrameworkCore, Microsoft.EntityFrameworkCore.SqlServer i Microsoft.EntityFrameworkCore.Tools namespace preko NuGetPackage Managera
+	2.1.5	DatabaseContext.cs
+	2.1.6	appsettings.json
+	2.1.7	Program.cs
+	2.1.8	Dodavanje atributa u entitetskim klasama (ukljucujuci i foreignkey elemente) - primjer: Donation.cs
+	2.1.9	Dodavanje migracije u NPM-u
+			add-migration DatabaseCreated
+			update-database
+2.2	Ubacivanje podataka u bazu
+	2.2.1	Pravimo folder Configurations i dodajemo klasu EntityConfiguration.cs
+	2.2.2	Popunjavamo tabele kao u spomenutom dokumentu
+	2.2.3	Dodajemo migraciju kao u prethodnom tipu - SeedingData
+2.3	Service Repository i Dependency Injection
+	2.3.1	Dodajemo foldere IRepositoy i Repository u root
+	2.3.2	Kreiramo IGenericRepository.cs (u njemu cemo smjestiti sve genericke metode koje cemo koristiti)
+	2.3.3	IGenericRepository.cs
+	2.3.3	Kreiramo GenericRepository.cs
+	2.3.4	GenericRepository.cs
+	2.3.5	GenericRepository.cs
+	2.3.6	Kreiramo IUnitOfWork.cs
+	2.3.7	IUnitOfWork.cs
+	2.3.8	Kreiramo UnitOfWork.cs
+	2.3.9	UnitOfWork.cs
+2.4	Postavljanje Automapper-a i DTOs
+	2.4.1	Dodajemo folder Models u root
+	2.4.2	Pravimo DTO klase sa anotacijama
+	2.4.3	Dodajemo AutoMapper.Extensions.Microsoft.DependencyInjection u NuGet Package Manager-u
+	2.4.4	Kreiramo Configurations folder u root
+	2.4.5	U istom folderu kreiramo MapperInitializer.cs
+	2.4.6	MapperInitializer.cs
+	2.4.7	Program.cs
+3.1	Pravljenje GET zahtjeva
+	3.1.1	Kreiramo ApiControllers - jedan po jedan - Zašto imamo UnitOfWork koji će kontroler da koristi? Čisto zbog maintainability-ja
+	3.1.2	Program.cs
+	3.1.3	Sredjujemo cycle error - dodajemo Microsoft.AspNetCore.Mvc.NewtonsoftJson biblioteku preko NuGet package manager-a
+	3.1.4	Program.cs
+	3.1.5	Bilo koji kontroler (primjer: DonatorController)
+4.1	Podešavanje User Identity uloge
+	4.1.1	Kreiramo klasu ModeratorDTO.cs i u nju upisujemo sve sto nam treba (login, register, update)
+		(napomena: ako bude trebalo dodatnih polja, mozemo napraviti novu klasu npr ApiUser, staviti da nasljedjuje IdentityUser klasu i podesiti da nam ona bude umjesto IdentityUser tipa u DatabaseContext.cs klasi
+	4.1.2	Kreiramo klasu ServiceExtensions.cs
+	4.1.3	ServiceExtensions.cs
+	4.1.4	Program.cs
+	4.1.5	Dodavanje migracije u NPM-u
+			add-migration AddedIdentity
+			update-database
+4.2	Dodavanje novog kontrolera (AccountController)
+	4.2.1	Kreiranje kontrolera
+	4.2.2	MapperInitializer.cs
+4.3	Dodavanje uloga (roles)
+	4.3.1	Kreiramo klasu EntityConfiguration.cs u folderu Configurations
+	4.3.2	EntityConfiguration.cs
+	4.3.3	DatabaseContext.cs
+	4.3.4	Dodavanje migracije u NPM-u
+			add-migration AddedDefaultValues
+			update-database
+4.4	Jwt token
+	4.4.1	appsettings.json
+	4.4.2	ServiceExtensions.cs
+	4.4.3	Program.cs
+	4.4.4	Kreiramo novi folder Services
+	4.4.5	U njemu kreiramo interfejs IAuthManager.cs
+	4.4.6	U njemu kreiramo klasu AuthManager.cs
+	4.4.7	Program.cs
+	4.4.8	AuthManager.cs
+	4.4.9	AuthManager.cs
+	4.4.10	AuthManager.cs
+4.5	Zastita Endpoints
+	4.5.1	Dodajemo [Authorize] anotaciju na sve kontrolere gdje su potrebni (primjer: AccountController.cs)
+	4.5.2	Program.cs
+5.1	Dodavanje POST endpointa
+	5.1.1	Bilo koji kontroler
+5.2	Dodavanje PUT endointa
+	5.2.1	Bilo koji kontroler
+5.3	Dodavanje DELETE endpointa
+	5.3.1	Bilo koji kontroler
+6.1	Paginacija
+	6.1.1	Kreiramo u folderu Models klasu RequestParams.cs
+	6.1.2	Bilo koja metoda koja zahtijeva paginaciju (primjer: 
+	6.1.3	IGenericRepository.cs
+	6.1.4	GenericRepository.cs
+6.2	Globalno rjesavanje gresaka
+	6.2.1	Kreiramo Errors.cs u Models
+	6.2.2	ServiceExtensions.cs
+	6.2.3	Program.cs

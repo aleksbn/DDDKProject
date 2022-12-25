@@ -11,6 +11,7 @@ namespace DDDKHostAPI
 {
     public static class ServiceExtensions
     {
+        // 4.1.3 Prvo pisemo ovu metodu
         public static void ConfigureIdentity(this IServiceCollection services)
         {
             var builder = services.AddIdentityCore<IdentityUser>(q => q.User.RequireUniqueEmail = true);
@@ -19,6 +20,7 @@ namespace DDDKHostAPI
             builder.AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
         }
 
+        //4.4.2 konfigurisemo JTW
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("Jwt");
@@ -42,6 +44,7 @@ namespace DDDKHostAPI
                 });
         }
 
+        //6.2.2 Na app objekat iz Program.cs fajla dodajemo nacin rjesavanja gresaka
         public static void ConfigureExceptionHandling(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(error => {

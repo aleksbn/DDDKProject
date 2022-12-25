@@ -9,6 +9,7 @@ namespace DDDKHostAPI.Services
 {
     public class AuthManager : IAuthManager
     {
+        //4.4.8 Radimo injection potrebnih objekata
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
         private IdentityUser _user;
@@ -18,6 +19,7 @@ namespace DDDKHostAPI.Services
             _configuration = configuration;
         }
 
+        //4.4.10 Kreiramo token (odnosi se na sljedece 4 funkcije)
         public async Task<string> CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
@@ -67,7 +69,7 @@ namespace DDDKHostAPI.Services
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-
+        //4.4.9 Prvo radimo provjeru da li korisnik postoji
         public async Task<bool> ValidateUser(LoginDTO userDTO)
         {
             _user = await _userManager.FindByNameAsync(userDTO.Email);

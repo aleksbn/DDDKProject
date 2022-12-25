@@ -16,6 +16,7 @@ namespace DDDKHostAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DonatorController> _logger;
+        //3.1.5 Dodajemo AutoMapper kako bismo podatke preuzete u domenskoj klasi mogli da pretvorimo u DTO klasu
         private readonly IMapper _mapper;
 
         public DonatorController(IUnitOfWork unitOfWork, ILogger<DonatorController> logger, IMapper mapper)
@@ -65,7 +66,7 @@ namespace DDDKHostAPI.Controllers
             return CreatedAtAction(nameof(GetDonator), new { id = donator.ID }, donator);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ActionName(nameof(UpdateDonator))]
         public async Task<IActionResult> UpdateDonator(int id, [FromBody] UpdateDonatorDTO donatorDTO)
         {

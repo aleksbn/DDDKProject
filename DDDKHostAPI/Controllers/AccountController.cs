@@ -55,7 +55,7 @@ namespace DDDKHostAPI.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            await _userManager.AddToRoleAsync(user, "Moderator");
+            await _userManager.AddToRoleAsync(user, registerDTO.Role);
             return Ok();
         }
 
@@ -82,14 +82,14 @@ namespace DDDKHostAPI.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPut]
         [ActionName(nameof(UpdateModerator))]
-        public async Task<IActionResult> UpdateModerator(string id, [FromBody] UpdateModeratorDTO moderatorDTO)
+        public async Task<IActionResult> UpdateModerator([FromBody] UpdateModeratorDTO moderatorDTO)
         {
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateModerator)}");
                 return BadRequest(ModelState);
             }
-            var user = await _userManager.Users.FirstOrDefaultAsync(q => q.Id.Equals(id));
+            var user = await _userManager.Users.FirstOrDefaultAsync(q => q.Email.Equals(moderatorDTO.OldEmail));
             if (user == null)
             {
                 _logger.LogError($"That user does not exist");
@@ -101,7 +101,7 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError("Password and its confirmation, or email and its confirmation do not match");
                 return BadRequest("Invalid data");
             }
-            if (_db.Users.Count(u => u.Email == moderatorDTO.Email) > 0)
+            if (_db.Users.Count(u => u.Email == moderatorDTO.Email) > 0 && user.Email != moderatorDTO.OldEmail)
             {
                 _logger.LogError("That email is already taken");
                 return BadRequest("Invalid data");

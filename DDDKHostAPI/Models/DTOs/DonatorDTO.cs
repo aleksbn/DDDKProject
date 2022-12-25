@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DDDKHostAPI.Models.DTOs
 {
-    public class CreateDonatorDTO
+    public class DonatorDTO
     {
         [Required]
         public string FirstName { get; set; }
@@ -17,16 +17,16 @@ namespace DDDKHostAPI.Models.DTOs
         [Required]
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-
+        [Required]
         public int BloodTypeId { get; set; }
         public int PreviousDonations { get; set; } = 0;
+
+        public IList<DonationDTO> Donations { get; set; }
     }
 
-    public class DonatorDTO: CreateDonatorDTO
+    public class CreateDonatorDTO: DonatorDTO
     {
         public int Id { get; set; }
-        public IList<DonationDTO> Donations { get; set; }
-        public BloodTypeDTO BloodType { get; set; }
     }
 
     public class UpdateDonatorDTO: DonatorDTO
