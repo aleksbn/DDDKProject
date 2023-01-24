@@ -11,7 +11,7 @@ namespace DDDKHostAPI
 {
     public static class ServiceExtensions
     {
-        // 4.1.3 Prvo pisemo ovu metodu
+        // 4.1.3 Prvo pisemo ovu metodu za konfiguraciju identiteta
         public static void ConfigureIdentity(this IServiceCollection services)
         {
             var builder = services.AddIdentityCore<IdentityUser>(q => q.User.RequireUniqueEmail = true);

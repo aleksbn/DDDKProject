@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DDDKHostAPI.Models.Data
 {
-    public class DatabaseContext : IdentityDbContext<IdentityUser>
+    //4.1.1	Mijenjamo klasu koja se nasljeđuje, iz DbContext u IdentityDbContext
+    public class DatabaseContext : IdentityDbContext<IdentityUser> //Ovdje se prvobitno nasljedjuje klasa DbContext, ali se kasnije, zbog logovanja, dodaje IdentityDbContext
     {
         //2.1.5	Popunjavamo DatabaseContext klasu (konstruktor i DbSets)
         public DatabaseContext(DbContextOptions options) : base(options)
@@ -17,12 +18,13 @@ namespace DDDKHostAPI.Models.Data
         public DbSet<BloodType> BloodTypes { get; set; }
         public DbSet<Donator> Donators { get; set; }
 
+        //2.2.2 Dodajemo metodu za kreiranje podataka prilikom startovanja aplikacije prvi put
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //2.2.1
             base.OnModelCreating(builder);
-            //4.3.3 Pozivanje konstruktora klasa koje ce unijeti random podatke
+            //4.3.2 Pozivanje konstruktora klasa koje ce unijeti random podatke
             builder.ApplyConfiguration(new RoleConfiguration());
+            //2.2.4 Pozivamo svaku od klasa i metoda za popunjavanje tabele
             builder.ApplyConfiguration(new BloodTypeConfiguration());
             builder.ApplyConfiguration(new LocationConfiguration());
             builder.ApplyConfiguration(new DonationEventConfiguration());

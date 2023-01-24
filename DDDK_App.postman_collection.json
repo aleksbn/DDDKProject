@@ -1,0 +1,876 @@
+{
+	"info": {
+		"_postman_id": "e08d6518-09f7-48a3-9674-694b76c4295c",
+		"name": "DDDK_App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8890526"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"Partizan@417302\",\r\n  \"email\": \"admin@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/account/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjcxMzY0MDUwLCJpc3MiOiJERERLSG9zdEFQSSIsImF1ZCI6IkFsbFJlZ2lzdGVyZWRVc2VycyJ9.FKZjnn7qyy_0EraYEIjkdDdH3AgCZmLB5Nrz-mmb4C8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"role\": \"string\",\r\n  \"passwordConfirmation\": \"string\",\r\n  \"emailConfirmation\": \"user@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/account/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjcxMzY0MDUwLCJpc3MiOiJERERLSG9zdEFQSSIsImF1ZCI6IkFsbFJlZ2lzdGVyZWRVc2VycyJ9.FKZjnn7qyy_0EraYEIjkdDdH3AgCZmLB5Nrz-mmb4C8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"role\": \"string\",\r\n  \"passwordConfirmation\": \"string\",\r\n  \"emailConfirmation\": \"user@example.com\",\r\n  \"oldEmail\": \"user@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/account/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjcxMzY0MDUwLCJpc3MiOiJERERLSG9zdEFQSSIsImF1ZCI6IkFsbFJlZ2lzdGVyZWRVc2VycyJ9.FKZjnn7qyy_0EraYEIjkdDdH3AgCZmLB5Nrz-mmb4C8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/account/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"account",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blood type",
+			"item": []
+		},
+		{
+			"name": "Donation",
+			"item": [
+				{
+					"name": "Donator Donations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donation/donator?donatorid=1&pagenumber=1&pagesize=5",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donation",
+								"donator"
+							],
+							"query": [
+								{
+									"key": "donatorid",
+									"value": "1"
+								},
+								{
+									"key": "pagenumber",
+									"value": "1"
+								},
+								{
+									"key": "pagesize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Donation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donation/donation/?id=1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donation",
+								"donation",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Donations from event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donation/event/?donationeventid=1&pagenumber=1&pagesize=5",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donation",
+								"event",
+								""
+							],
+							"query": [
+								{
+									"key": "donationeventid",
+									"value": "1"
+								},
+								{
+									"key": "pagenumber",
+									"value": "1"
+								},
+								{
+									"key": "pagesize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Single Donation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"donatorId\": 0,\r\n  \"donationEventId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donation",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Donation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"donatorId\": 0,\r\n  \"donationEventId\": 0,\r\n  \"id\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donation/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donation",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Donation Event",
+			"item": [
+				{
+					"name": "Get All Donation Events",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donationevent?pagenumber=1&pagesize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donationevent"
+							],
+							"query": [
+								{
+									"key": "pagenumber",
+									"value": "1"
+								},
+								{
+									"key": "pagesize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Donation Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donationevent/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donationevent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Donation Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"eventDate\": \"2022-12-25T11:04:44.273Z\",\r\n  \"locationId\": 0,\r\n  \"description\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donationevent",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donationevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Donation Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"eventDate\": \"2022-12-25T11:09:50.378Z\",\r\n  \"locationId\": 0,\r\n  \"description\": \"string\",\r\n  \"id\": 0\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donationevent/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donationevent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Donator",
+			"item": [
+				{
+					"name": "Get Single Donator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donator/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donator",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Donator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"birthDate\": \"2022-12-25T11:18:55.968Z\",\r\n  \"address\": \"string\",\r\n  \"phoneNumber\": \"string\",\r\n  \"bloodTypeId\": 0,\r\n  \"previousDonations\": 0,\r\n  \"donations\": [\r\n    {\r\n      \"donatorId\": 0,\r\n      \"donationEventId\": 0,\r\n      \"id\": 0\r\n    }\r\n  ],\r\n  \"id\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donator",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Donator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"birthDate\": \"2022-12-25T11:12:45.550Z\",\r\n  \"address\": \"string\",\r\n  \"phoneNumber\": \"string\",\r\n  \"bloodTypeId\": 0,\r\n  \"previousDonations\": 0,\r\n  \"id\": 0,\r\n  \"donations\": [\r\n    {\r\n      \"donatorId\": 0,\r\n      \"donationEventId\": 0,\r\n      \"id\": 0\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/donator/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donator",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Donator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donator/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donator",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Donators of Blood Type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/donator/bloodtype?bloodtypeid=1&pagenumber=1&pagesize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"donator",
+								"bloodtype"
+							],
+							"query": [
+								{
+									"key": "bloodtypeid",
+									"value": "1"
+								},
+								{
+									"key": "pagenumber",
+									"value": "1"
+								},
+								{
+									"key": "pagesize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "Get All Locations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/location?pagenumber=1&pagesize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"location"
+							],
+							"query": [
+								{
+									"key": "pagenumber",
+									"value": "1"
+								},
+								{
+									"key": "pagesize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7056/api/location/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"string\",\r\n    \"description\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/location",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2NzE5ODU2OTQsImlzcyI6IkREREtIb3N0QVBJIiwiYXVkIjoiQWxsUmVnaXN0ZXJlZFVzZXJzIn0.skh8Mu2kncJrmZIkGv_9Gr7li78M2ETJ_UNPbbj0KTY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"string\",\r\n    \"description\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7056/api/location/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7056",
+							"path": [
+								"api",
+								"location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

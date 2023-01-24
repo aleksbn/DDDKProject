@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace DDDKHostAPI.Configurations
 {
-    //4.3.2 Za svaku tabelu iz baze podataka unosimo podatke preko ove klase prilikom prvog startovanja
+    //4.3.1 Za svaku tabelu iz baze podataka unosimo podatke preko ove klase prilikom prvog startovanja
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
@@ -25,6 +25,7 @@ namespace DDDKHostAPI.Configurations
                 });
         }
     }
+    //2.2.3 Pravimo klasu i metodu za konfigurisanje svake od tabela sa podacima
     public class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
         public void Configure(EntityTypeBuilder<Location> builder)

@@ -9,6 +9,7 @@ namespace DDDKHostAPI.Configurations
     {
         public MapperInitializer()
         {
+            // 2.4.5 Kreiramo kombinacije za sva pretvaranja jedne klase u drugu
             CreateMap<BloodType, BloodTypeDTO>().ReverseMap();
             CreateMap<Donator, DonatorDTO>().ReverseMap();
             CreateMap<Donator, CreateDonatorDTO>().ReverseMap();

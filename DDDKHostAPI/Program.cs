@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 
-//1.2   Konfiguracija seriloga
+//1.1.2   Konfiguracija seriloga
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
         path: "logs\\log-.txt",
@@ -19,7 +19,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
     ));
 
 //2.1.7 Dodajemo bazu podataka prilikom startovanja
-builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
+builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("CloudDB")));
 //4.1.4 Ukljucujemo sistem autentifikacije (sledece dvije linije)
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
@@ -32,9 +32,9 @@ builder.Services.AddCors(o => {
         b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
-//2.4.7 Ukljucujemo AutoMapper u Startup
+//2.4.6 Ukljucujemo AutoMapper u Startup
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
-//3.1.2 Dodajemo UnitOfWork kako bismo ga mogli koristiti bez instanciranja (klasicni dependency injection) - AddTrnasient dodaje objekat na svaki zahtjev, AddSingleton je 1 na cijelu aplikaciju, a
+//3.1.2 Dodajemo UnitOfWork kako bismo ga mogli koristiti bez instanciranja (klasicni dependency injection) - AddTransient dodaje objekat na svaki zahtjev, AddSingleton je 1 na cijelu aplikaciju, a
 //AddScoped je za odredjeni set zahtjeva, za svaki kontroler koji se instancira
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //4.4.7 Dodajemo AuthManager kako bismo ga mogli koristiti u aplikaciji
