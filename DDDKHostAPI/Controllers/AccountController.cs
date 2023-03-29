@@ -47,6 +47,7 @@ namespace DDDKHostAPI.Controllers
             var user = _mapper.Map<IdentityUser>(registerDTO);
             user.UserName = user.Email;
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
+            await _userManager.AddToRoleAsync(user, registerDTO.Role);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -55,7 +56,6 @@ namespace DDDKHostAPI.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            await _userManager.AddToRoleAsync(user, registerDTO.Role);
             return Ok();
         }
 

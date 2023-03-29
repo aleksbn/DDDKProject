@@ -47,7 +47,7 @@ namespace DDDKHostAPI.Controllers
 
         [HttpPost]
         [ActionName(nameof(CreateLocation))]
-        public async Task<IActionResult> CreateLocation([FromBody]CreateLocationDTO locationDTO)
+        public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDTO locationDTO)
         {
             if (!ModelState.IsValid)
             {
