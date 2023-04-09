@@ -19,7 +19,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File(
     ));
 
 //2.1.7 Dodajemo bazu podataka prilikom startovanja
-builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("CloudDB")));
+builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
 //4.1.4 Ukljucujemo sistem autentifikacije (sledece dvije linije)
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
