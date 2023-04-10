@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Security.Claims;
 
 namespace DDDKHostAPI.Controllers
 {
@@ -47,7 +49,6 @@ namespace DDDKHostAPI.Controllers
             var user = _mapper.Map<IdentityUser>(registerDTO);
             user.UserName = user.Email;
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
-            await _userManager.AddToRoleAsync(user, registerDTO.Role);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -55,6 +56,10 @@ namespace DDDKHostAPI.Controllers
                     ModelState.AddModelError(error.Code, error.Description);
                 }
                 return BadRequest(ModelState);
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, registerDTO.Role);
             }
             return Ok();
         }

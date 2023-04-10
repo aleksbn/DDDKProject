@@ -3,8 +3,10 @@ using DDDKHostAPI.Models.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Reflection;
 using System.Text;
 
 namespace DDDKHostAPI
@@ -64,6 +66,18 @@ namespace DDDKHostAPI
                     }
                 });
             });
+        }
+
+        public static string GetConnectionString()
+        {
+            SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
+            string path = Assembly.GetEntryAssembly().Location;
+            path = Path.GetFullPath(Path.Combine(path, @"..\..\..\..\"));
+            sb.AttachDBFilename = path + @"AppData\DDDK_db.mdf";
+            sb.IntegratedSecurity = true;
+            sb.DataSource = @"(LocalDB)\MSSQLLocalDB";
+
+            return sb.ToString();
         }
     }
 }

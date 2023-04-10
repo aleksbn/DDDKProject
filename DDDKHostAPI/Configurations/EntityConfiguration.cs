@@ -1,4 +1,8 @@
-﻿using DDDKHostAPI.Models.Data;
+﻿using AutoMapper;
+using DDDKHostAPI.Controllers;
+using DDDKHostAPI.Models.Data;
+using DDDKHostAPI.Models.DTOs;
+using DDDKHostAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
