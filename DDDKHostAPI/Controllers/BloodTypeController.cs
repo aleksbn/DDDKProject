@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BloodTypeController : ControllerBase

@@ -10,7 +10,6 @@ using System.Threading;
 
 namespace DDDKHostAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DonationController : ControllerBase
@@ -27,39 +26,27 @@ namespace DDDKHostAPI.Controllers
         }
 
         [HttpGet]
-        [Route("donator")]
-        [ActionName(nameof(GetAllFromDonator))]
-        //6.1.2 Ovdje se dodaje [FromQuery] RequestParams requestParams kako bi se proslijedilo vise od jednog parametra (konkretno, PageSize i PageNumber)
-        public async Task<IActionResult> GetAllFromDonator(int donatorId, [FromQuery] RequestParams requestParams)
+        [ActionName(nameof(GetAll))]
+        public async Task<IActionResult> GetAll()
         {
-            var donations = await _unitOfWork.Donations.GetAll(d => d.DonatorId == donatorId, null, new List<string>
-            {
-                "DonationEvent"
-            }, requestParams);
-            var donationsToReturn = _mapper.Map<IList<DonationDTO>>(donations);
-            return Ok(donationsToReturn);
-        }
-
-        [HttpGet]
-        [Route("donation")]
-        [ActionName(nameof(Get))]
-        public async Task<IActionResult> Get(int id)
-        {
-            var donation = await _unitOfWork.Donations.Get(d => d.Id == id);
-            var donationToReturn = _mapper.Map<DonationDTO>(donation);
-            return Ok(donationToReturn);
-        }
-
-        [HttpGet]
-        [Route("event")]
-        [ActionName(nameof(GetAllFromDonationEvent))]
-        public async Task<IActionResult> GetAllFromDonationEvent(int donationEventId, [FromQuery] RequestParams requestParams)
-        {
-            var donations = await _unitOfWork.Donations.GetAll(d => d.DonationEventId == donationEventId, null, new List<string>
+            var donations = await _unitOfWork.Donations.GetAll(null, donations => donations.OrderBy(d => d.Donator.LastName).ThenBy(d => d.Donator.FirstName).ThenBy(d => d.DonationEvent.EventDate), new List<string>
             {
                 "Donator"
-            }, requestParams);
+            });
             var donationsToReturn = _mapper.Map<IList<DonationDTO>>(donations);
+            foreach (var donation in donationsToReturn)
+            {
+                var donator = await _unitOfWork.Donators.Get(d => d.Id == donation.DonatorId);
+                if(donation.DonationEventId != 0)
+                {
+                    DonationEvent donationEvent = await _unitOfWork.DonationEvents.Get(d => d.Id == donation.DonationEventId);
+                    donation.DonatorFullName = donator.FirstName + " " + donator.LastName + "(" + donator.Id + ") - " + donationEvent.EventDate.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    donation.DonatorFullName = donator.FirstName + " " + donator.LastName + " - Unknown date";
+                }
+            }
             return Ok(donationsToReturn);
         }
 
@@ -73,9 +60,13 @@ namespace DDDKHostAPI.Controllers
                 return BadRequest(ModelState);
             }
             var donation = _mapper.Map<Donation>(donationDTO);
+            if ((await _unitOfWork.Donations.GetAll()).Any(d => d.DonatorId == donation.DonatorId && d.DonationEventId == donation.DonationEventId))
+            {
+                return BadRequest("That donator has already donated blood on that donation event!");
+            }
             await _unitOfWork.Donations.Insert(donation);
             await _unitOfWork.Save();
-            return CreatedAtAction(nameof(Get), new { id = donation.Id }, donation);
+            return Ok(donation.Id);
         }
 
         [HttpPut("{id:int}")]
@@ -94,9 +85,34 @@ namespace DDDKHostAPI.Controllers
                 return BadRequest("Submitted data is invalid");
             }
             _mapper.Map(donationDTO, donation);
+            donation.Id = id;
+            if ((await _unitOfWork.Donations.GetAll()).Any(d => d.DonatorId == donation.DonatorId && d.DonationEventId == donation.DonationEventId))
+            {
+                return BadRequest("That donator has already donated blood on that donation event!");
+            }
             _unitOfWork.Donations.Update(donation);
             await _unitOfWork.Save();
             return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        [ActionName(nameof(DeleteDonation))]
+        public async Task<IActionResult> DeleteDonation(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonation)}");
+                return BadRequest();
+            }
+            var donation = await _unitOfWork.Donations.Get(de => de.Id == id);
+            if (donation == null)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonation)}");
+                return BadRequest("Submitted data is invalid");
+            }
+            await _unitOfWork.Donations.Delete(donation.Id);
+            await _unitOfWork.Save();
+            return Ok("Donation deleted!");
         }
     }
 }

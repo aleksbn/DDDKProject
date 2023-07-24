@@ -9,7 +9,7 @@ namespace DDDKHostAPI.Models.Data
 
         [ForeignKey(nameof(Location))]
         public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
 
         public string Description { get; set; }
     }

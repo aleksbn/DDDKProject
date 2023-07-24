@@ -31,7 +31,6 @@ namespace DDDKHostAPI.Controllers
             _db = db;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ActionName(nameof(Register))]
         [Route("register")]
@@ -78,13 +77,14 @@ namespace DDDKHostAPI.Controllers
             {
                 return Unauthorized("User login attempt failed");
             }
+            var user = _userManager.Users.FirstOrDefault( u => u.Email == loginDTO.Email);
             return Accepted(new
             {
-                Token = await _authManager.CreateToken()
-            });
+                Token = await _authManager.CreateToken(),
+                Role = await _userManager.GetRolesAsync(user)
+            }) ;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut]
         [ActionName(nameof(UpdateModerator))]
         public async Task<IActionResult> UpdateModerator([FromBody] UpdateModeratorDTO moderatorDTO)
@@ -118,7 +118,6 @@ namespace DDDKHostAPI.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         [ActionName(nameof(DeleteModerator))]
         public async Task<IActionResult> DeleteModerator(string id)

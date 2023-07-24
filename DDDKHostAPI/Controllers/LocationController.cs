@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase
@@ -26,23 +25,11 @@ namespace DDDKHostAPI.Controllers
 
         [HttpGet]
         [ActionName(nameof(GetLocations))]
-        public async Task<IActionResult> GetLocations([FromQuery] RequestParams requestParams)
+        public async Task<IActionResult> GetLocations()
         {
-            var locations = await _unitOfWork.Locations.GetAll(null, null, null, requestParams);
+            var locations = await _unitOfWork.Locations.GetAll();
             var locationsToReturn = _mapper.Map<IList<LocationDTO>>(locations);
             return Ok(locationsToReturn);
-        }
-
-        [HttpGet("{id:int}")]
-        [ActionName(nameof(GetLocation))]
-        public async Task<IActionResult> GetLocation(int id)
-        {
-            var location = await _unitOfWork.Locations.Get(l => l.Id == id, new List<string>
-            {
-                "DonationEvents"
-            });
-            var locationToReturn = _mapper.Map<LocationDTO>(location);
-            return Ok(locationToReturn);
         }
 
         [HttpPost]
@@ -57,7 +44,7 @@ namespace DDDKHostAPI.Controllers
             var location = _mapper.Map<Location>(locationDTO);
             await _unitOfWork.Locations.Insert(location);
             await _unitOfWork.Save();
-            return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
+            return Ok("Object has been created");
         }
 
         [HttpPut("{id:int}")]
@@ -77,6 +64,26 @@ namespace DDDKHostAPI.Controllers
             }
             _mapper.Map(locationDTO, location);
             _unitOfWork.Locations.Update(location);
+            await _unitOfWork.Save();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        [ActionName(nameof(DeleteLocation))]
+        public async Task<IActionResult> DeleteLocation(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(UpdateLocation)}");
+                return BadRequest("That location does not exist");
+            }
+            var location = await _unitOfWork.Locations.Get(q => q.Id == id);
+            if (location == null)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(UpdateLocation)}");
+                return BadRequest("Submitted data is invalid");
+            }
+            await _unitOfWork.Locations.Delete(id);
             await _unitOfWork.Save();
             return NoContent();
         }

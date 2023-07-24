@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DonationEventController : ControllerBase
@@ -27,21 +26,9 @@ namespace DDDKHostAPI.Controllers
 
         [HttpGet]
         [ActionName(nameof(GetAll))]
-        public async Task<IActionResult> GetAll([FromQuery]RequestParams requestParams)
+        public async Task<IActionResult> GetAll()
         {
-            var donationEvents = await _unitOfWork.DonationEvents.GetAll(null, null, new List<string>
-            {
-                "Location"
-            }, requestParams);
-            var donationEventsToReturn = _mapper.Map<IList<DonationEventDTO>>(donationEvents);
-            return Ok(donationEventsToReturn);
-        }
-
-        [HttpGet("{id:int}")]
-        [ActionName(nameof(Get))]
-        public async Task<IActionResult> Get(int id)
-        {
-            var donationEvents = await _unitOfWork.DonationEvents.GetAll(de => de.Id == id, null, new List<string>
+            var donationEvents = await _unitOfWork.DonationEvents.GetAll(null, donationEvents => donationEvents.OrderBy(de => de.Location.Name), new List<string>
             {
                 "Location"
             });
@@ -61,7 +48,7 @@ namespace DDDKHostAPI.Controllers
             var donationEvent = _mapper.Map<DonationEvent>(donationEventDTO);
             await _unitOfWork.DonationEvents.Insert(donationEvent);
             await _unitOfWork.Save();
-            return CreatedAtAction(nameof(Get), new { id = donationEvent.Id }, donationEvent);
+            return Ok("Object has been created");
         }
 
         [HttpPut("{id:int}")]
@@ -80,9 +67,40 @@ namespace DDDKHostAPI.Controllers
                 return BadRequest("Submitted data is invalid");
             }
             _mapper.Map(donationEventDTO, donationEvent);
+            donationEvent.Location = null;
             _unitOfWork.DonationEvents.Update(donationEvent);
             await _unitOfWork.Save();
             return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        [ActionName(nameof(DeleteDonationEvent))]
+        public async Task<IActionResult> DeleteDonationEvent(int id)
+        {
+            if(id <= 0)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonationEvent)}");
+                return BadRequest();
+            }
+            var donationEvent = await _unitOfWork.DonationEvents.Get(de => de.Id ==  id);
+            if (donationEvent == null)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonationEvent)}");
+                return BadRequest("Submitted data is invalid");
+            }
+            var donationsToUpdate = await _unitOfWork.Donations.GetAll(d => d.DonationEventId == id);
+            if (donationsToUpdate.Count > 0)
+            {
+                foreach (var donation in donationsToUpdate)
+                {
+                    donation.DonationEventId = 0;
+                    _unitOfWork.Donations.Update(donation);
+                    await _unitOfWork.Save();
+                }
+            }
+            await _unitOfWork.DonationEvents.Delete(donationEvent.Id);
+            await _unitOfWork.Save();
+            return Ok("Donation event deleted!");
         }
     }
 }

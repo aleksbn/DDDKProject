@@ -1,10 +1,11 @@
 ﻿using DDDKHostAPI.Models.Data;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DDDKHostAPI.Models.DTOs
 {
-    public class DonatorDTO
+    public class CreateDonatorDTO
     {
         [Required]
         public string FirstName { get; set; }
@@ -21,10 +22,10 @@ namespace DDDKHostAPI.Models.DTOs
         public int BloodTypeId { get; set; }
         public int PreviousDonations { get; set; } = 0;
 
-        public IList<DonationDTO> Donations { get; set; }
+        public IList<DonationDTO>? Donations { get; set; }
     }
 
-    public class CreateDonatorDTO: DonatorDTO
+    public class DonatorDTO : CreateDonatorDTO
     {
         public int Id { get; set; }
     }

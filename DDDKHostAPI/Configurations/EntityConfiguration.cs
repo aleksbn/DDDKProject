@@ -229,7 +229,7 @@ namespace DDDKHostAPI.Configurations
                 generisaniBrojTelefona = "065/" + r.Next(100, 1000) + "-" + r.Next(100, 1000);
                 sviDonatori[i] = new Donator
                 {
-                    ID = i + 1,
+                    Id = i + 1,
                     FirstName = generisanoIme,
                     LastName = generisanoPrezime,
                     Email = generisaniEmail,

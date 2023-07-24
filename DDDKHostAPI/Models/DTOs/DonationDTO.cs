@@ -14,6 +14,7 @@ namespace DDDKHostAPI.Models.DTOs
     {
         [Required]
         public int Id { get; set; }
+        public string? DonatorFullName { get; set; }
     }
 
     public class UpdateDonationDTO: DonationDTO

@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DonatorController : ControllerBase
@@ -26,28 +25,12 @@ namespace DDDKHostAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id:int}")]
-        [ActionName(nameof(GetDonator))]
-        public async Task<IActionResult> GetDonator(int id)
-        {
-            var donator = await _unitOfWork.Donators.Get(d => d.ID == id, new List<string>
-            {
-                "Donations"
-            });
-            var donatorToReturn = _mapper.Map<DonatorDTO>(donator);
-            return Ok(donatorToReturn);
-        }
-
         [HttpGet]
-        [Route("bloodtype")]
-        [ActionName(nameof(GetAllFromBloodType))]
-        public async Task<IActionResult> GetAllFromBloodType(int bloodTypeId, [FromQuery] RequestParams requestParams)
+        [ActionName(nameof(GetAll))]
+        public async Task<IActionResult> GetAll()
         {
-            var donators = await _unitOfWork.Donators.GetAll(d => d.BloodTypeId == bloodTypeId, null, new List<string>
-            {
-                "BloodType", "Donations"
-            }, requestParams);
-            var donatorsToReturn = _mapper.Map<IList<DonatorDTO>>(donators);
+            var donators = await _unitOfWork.Donators.GetAll(null, donators => donators.OrderBy(d => d.LastName).ThenBy(d => d.FirstName));
+            var donatorsToReturn = _mapper.Map<List<DonatorDTO>>(donators);
             return Ok(donatorsToReturn);
         }
 
@@ -63,7 +46,7 @@ namespace DDDKHostAPI.Controllers
             var donator = _mapper.Map<Donator>(donatorDTO);
             await _unitOfWork.Donators.Insert(donator);
             await _unitOfWork.Save();
-            return CreatedAtAction(nameof(GetDonator), new { id = donator.ID }, donator);
+            return Ok("Object has been created");
         }
 
         [HttpPut("{id:int}")]
@@ -75,12 +58,13 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonator)}");
                 return BadRequest(ModelState);
             }
-            var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
+            var donator = await _unitOfWork.Donators.Get(q => q.Id == id);
             if (donator == null)
             {
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateDonator)}");
                 return BadRequest("Submitted data is invalid");
             }
+            donatorDTO.Id = id;
             _mapper.Map(donatorDTO, donator);
             _unitOfWork.Donators.Update(donator);
             await _unitOfWork.Save();
@@ -96,7 +80,7 @@ namespace DDDKHostAPI.Controllers
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonator)}");
                 return BadRequest();
             }
-            var donator = await _unitOfWork.Donators.Get(q => q.ID == id);
+            var donator = await _unitOfWork.Donators.Get(q => q.Id == id);
             if (donator == null)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonator)}");
