@@ -63,6 +63,25 @@ namespace DDDKHostAPI.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [ActionName(nameof(GetAll))]
+        [Route("get")]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var usersToReturn = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                usersToReturn.Add(new UserDTO
+                {
+                    Email = user.Email,
+                    ID = user.Id,
+                    Role = (await _userManager.GetRolesAsync(user))[0]
+                });
+            }
+            return Ok(usersToReturn);
+        }
+
         [HttpPost]
         [Route("login")]
         [ActionName(nameof(Login))]
@@ -118,11 +137,11 @@ namespace DDDKHostAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete]
         [ActionName(nameof(DeleteModerator))]
-        public async Task<IActionResult> DeleteModerator(string id)
+        public async Task<IActionResult> DeleteModerator([FromQuery]string id)
         {
-            if (id != "")
+            if (id == "")
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteModerator)}");
                 return BadRequest();

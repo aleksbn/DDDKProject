@@ -29,7 +29,7 @@ namespace DDDKHostAPI.Controllers
         [ActionName(nameof(GetAll))]
         public async Task<IActionResult> GetAll()
         {
-            var donations = await _unitOfWork.Donations.GetAll(null, donations => donations.OrderBy(d => d.Donator.LastName).ThenBy(d => d.Donator.FirstName).ThenBy(d => d.DonationEvent.EventDate), new List<string>
+            var donations = await _unitOfWork.Donations.GetAll(null, donations => donations.OrderBy(d => d.Donator.LastName).ThenBy(d => d.Donator.FirstName).ThenBy(d => d.Donator.Id).ThenBy(d => d.DonationEvent.EventDate), new List<string>
             {
                 "Donator"
             });
@@ -40,7 +40,7 @@ namespace DDDKHostAPI.Controllers
                 if(donation.DonationEventId != 0)
                 {
                     DonationEvent donationEvent = await _unitOfWork.DonationEvents.Get(d => d.Id == donation.DonationEventId);
-                    donation.DonatorFullName = donator.FirstName + " " + donator.LastName + "(" + donator.Id + ") - " + donationEvent.EventDate.ToString("dd.MM.yyyy");
+                    donation.DonatorFullName = donator.FirstName + " " + donator.LastName + " (id = " + donator.Id + ") - " + donationEvent.EventDate.ToString("dd.MM.yyyy");
                 }
                 else
                 {
@@ -69,6 +69,32 @@ namespace DDDKHostAPI.Controllers
             return Ok(donation.Id);
         }
 
+        [HttpPost]
+        [Route("addmultiple")]
+        [ActionName(nameof(CreateDonationRange))]
+        public async Task<IActionResult> CreateDonationRange([FromBody] List<CreateDonationDTO> donationDTOs)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Invalid POST attempt in {nameof(CreateDonationRange)}");
+                return BadRequest(ModelState);
+            }
+            List<Donation> toAdd = new List<Donation>();
+            foreach (var d in donationDTOs)
+            {
+                var donation = _mapper.Map<Donation>(d);
+                toAdd.Add(donation);
+                if ((await _unitOfWork.Donations.GetAll()).Any(d => d.DonatorId == donation.DonatorId && d.DonationEventId == donation.DonationEventId))
+                {
+                    return BadRequest("That donator has already donated blood on that donation event!");
+                }
+            }
+
+            await _unitOfWork.Donations.InsertRange(toAdd);
+            await _unitOfWork.Save();
+            return Ok("Donations added");
+        }
+
         [HttpPut("{id:int}")]
         [ActionName(nameof(UpdateDonation))]
         public async Task<IActionResult> UpdateDonation(int id, [FromBody] UpdateDonationDTO donationDTO)
@@ -93,6 +119,23 @@ namespace DDDKHostAPI.Controllers
             _unitOfWork.Donations.Update(donation);
             await _unitOfWork.Save();
             return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        [Route("deletemultiple")]
+        [ActionName(nameof(DeleteDonationRange))]
+        public async Task<IActionResult> DeleteDonationRange([FromQuery]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteDonationRange)}");
+                return BadRequest(ModelState);
+            }
+            List<Donation> toRemove = (await _unitOfWork.Donations.GetAll(d => d.DonationEventId == id)).ToList();
+            
+            _unitOfWork.Donations.DeleteRange(toRemove);
+            await _unitOfWork.Save();
+            return Ok("Donations removed");
         }
 
         [HttpDelete("{id:int}")]
