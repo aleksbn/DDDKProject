@@ -1,7 +1,4 @@
-﻿using DDDKHostAPI.Models.Data;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DDDKHostAPI.Models.DTOs
 {

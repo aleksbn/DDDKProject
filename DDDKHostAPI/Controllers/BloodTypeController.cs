@@ -1,13 +1,12 @@
 ﻿using DDDKHostAPI.IRepository;
-using DDDKHostAPI.Models.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDKHostAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class BloodTypeController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

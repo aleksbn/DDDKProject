@@ -1,13 +1,7 @@
-﻿using AutoMapper;
-using DDDKHostAPI.Controllers;
-using DDDKHostAPI.Models.Data;
-using DDDKHostAPI.Models.DTOs;
-using DDDKHostAPI.Services;
+﻿using DDDKHostAPI.Models.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DDDKHostAPI.Configurations
 {

@@ -3,15 +3,13 @@ using DDDKHostAPI.Models.Data;
 using DDDKHostAPI.Models.DTOs;
 using DDDKHostAPI.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System.Security.Claims;
 
 namespace DDDKHostAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -82,6 +80,7 @@ namespace DDDKHostAPI.Controllers
             return Ok(usersToReturn);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         [ActionName(nameof(Login))]
