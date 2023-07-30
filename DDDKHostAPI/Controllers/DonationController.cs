@@ -120,10 +120,9 @@ namespace DDDKHostAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("deletemultiple")]
+        [HttpDelete("deletemultiple/{id:int}")]
         [ActionName(nameof(DeleteDonationRange))]
-        public async Task<IActionResult> DeleteDonationRange([FromQuery]int id)
+        public async Task<IActionResult> DeleteDonationRange(int id)
         {
             if (!ModelState.IsValid)
             {
