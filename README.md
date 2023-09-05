@@ -11,3 +11,6 @@ and just a little bit tweaked default Authentication System.
 
 Github frontend repository:
 https://github.com/aleksbn/DDDK_Wpf_App
+
+Skills: ASP.NET · ASP.NET Web API · XAML · Back-End Web Development · C# · Transact-SQL (T-SQL) · Git · Object-Oriented Programming (OOP) · 
+  Entity Framework · Microsoft SQL Server · Language Integrated Query (LINQ) · Windows Presentation Foundation (WPF)
