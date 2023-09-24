@@ -33,7 +33,7 @@ namespace DDDKHostAPI.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>>? expression = null, List<string>? includes = null)
+        public async Task<T> Get(Expression<Func<T, bool>> expression = null, List<string> includes = null)
         {
             IQueryable<T> query = _db;
             if (includes != null)
@@ -46,7 +46,7 @@ namespace DDDKHostAPI.Repository
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
         //6.1.4 Dodajemo requestParams da bi paginacija radila
-        public async Task<IList<T>> GetAll(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null, RequestParams? requestParams = null)
+        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null, RequestParams requestParams = null)
         {
             IQueryable<T> query = _db;
             if (expression != null)

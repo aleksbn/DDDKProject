@@ -14,10 +14,10 @@ namespace DDDKHostAPI.Models.Data
 
         [ForeignKey(nameof(BloodType))]
         public int BloodTypeId { get; set; }
-        public BloodType? BloodType { get; set; }
+        public BloodType BloodType { get; set; }
 
         public int PreviousDonations { get; set; }
 
-        public virtual IList<Donation>? Donations { get; set; }
+        public virtual IList<Donation> Donations { get; set; }
     }
 }

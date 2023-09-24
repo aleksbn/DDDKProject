@@ -47,7 +47,7 @@ namespace DDDKHostAPI.Controllers
             var donationEvent = _mapper.Map<DonationEvent>(donationEventDTO);
             await _unitOfWork.DonationEvents.Insert(donationEvent);
             await _unitOfWork.Save();
-            return Ok("Object has been created");
+            return Ok(donationEvent.Id);
         }
 
         [HttpPut("{id:int}")]

@@ -19,7 +19,7 @@ namespace DDDKHostAPI.Models.DTOs
         public int BloodTypeId { get; set; }
         public int PreviousDonations { get; set; } = 0;
 
-        public IList<DonationDTO>? Donations { get; set; }
+        public IList<DonationDTO> Donations { get; set; }
     }
 
     public class DonatorDTO : CreateDonatorDTO

@@ -14,7 +14,7 @@ namespace DDDKHostAPI.Models.DTOs
     public class DonationEventDTO: CreateDonationEventDTO
     {
         public int Id { get; set; }
-        public string? LocationName { get; set; }
+        public string LocationName { get; set; }
     }
 
     public class UpdateDonationEventDTO: DonationEventDTO

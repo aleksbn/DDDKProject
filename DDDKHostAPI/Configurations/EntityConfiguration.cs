@@ -189,21 +189,6 @@ namespace DDDKHostAPI.Configurations
     public class DonatorConfiguration : IEntityTypeConfiguration<Donator>
     {
         Random r = new Random();
-        public string[] imena = new string[]
-        {
-            "Aleksandar", "Petar", "Ivana", "Mitar", "Bojan", "Slavica", "Mirko", "Dejan", "Zeljka", "Nikola", "Natasa", "Nevena", "Jovana", "Aleksandra", "Ivan", "Nemanja", "Nikolina", "Uros",
-            "Slavko", "Marica", "Marija", "Marko", "Sandra", "Neven", "Miroslav"
-        };
-        public string[] prezimena = new string[]
-        {
-            "Matic", "Ilic", "Jovic", "Petrovic", "Becic", "Mitrovic", "Jankovic", "Jokanovic", "Aleksic", "Tanaskovic", "Popovic", "Ivkovic", "Lalic", "Rodic", "Milovanovic", "Bojic", "Markovic", 
-            "Simic", "Djordjevic", "Djurickovic", "Stojkovic", "Tadic", "Stevanovic", "Stevic", "Stanic"
-        };
-        public string[] ulice = new string[]
-        {
-            "Petra Kocica", "Sime Matavulja", "Ive Andrica", "Svetog Save", "Nikole Tesle", "Jovana Ducica", "Gavrila Principa", "Dusana Baranina", "Mihajla Pupina", "Patrijarha Pavla", 
-            "Danila Kisa", "Dusana Silnog", "Kralja Petra I Karadjordjevica", "Dinastije Obrenovic", "Masarikova", "Svetozara Markovica", "Mihaila Petrovica Alasa"
-        };
         public Donator[] sviDonatori = new Donator[30];
         private string generisanoIme;
         private string generisanoPrezime;
@@ -215,11 +200,11 @@ namespace DDDKHostAPI.Configurations
         {
             for (int i = 0; i < 30; i++)
             {
-                generisanoIme = imena[r.Next(0, imena.Length - 1)];
-                generisanoPrezime = prezimena[r.Next(0, prezimena.Length - 1)];
+                generisanoIme = RandomValues.imena[r.Next(0, RandomValues.imena.Length - 1)];
+                generisanoPrezime = RandomValues.prezimena[r.Next(0, RandomValues.prezimena.Length - 1)];
                 generisaniEmail = generisanoIme + generisanoPrezime + r.Next() + "@gmail.com";
                 generisaniDatumRodjenja = new DateTime(r.Next(1950, 2000), r.Next(1, 13), r.Next(1, 29));
-                generisanaAdresa = ulice[r.Next(0, ulice.Length - 1)] + " " + r.Next(1, 201);
+                generisanaAdresa = RandomValues.ulice[r.Next(0, RandomValues.ulice.Length - 1)] + " " + r.Next(1, 201);
                 generisaniBrojTelefona = "065/" + r.Next(100, 1000) + "-" + r.Next(100, 1000);
                 sviDonatori[i] = new Donator
                 {

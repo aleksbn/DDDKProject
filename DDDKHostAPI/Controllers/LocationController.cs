@@ -44,7 +44,7 @@ namespace DDDKHostAPI.Controllers
             var location = _mapper.Map<Location>(locationDTO);
             await _unitOfWork.Locations.Insert(location);
             await _unitOfWork.Save();
-            return Ok("Object has been created");
+            return Ok(location.Id);
         }
 
         [HttpPut("{id:int}")]
